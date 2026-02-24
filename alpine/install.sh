@@ -21,7 +21,7 @@ install -D ../common/startup.py /etc/python/startup.py
 install ../common/py /usr/local/bin/py
 install ../common/randint /usr/local/bin/randint
 
-pkgs="eza htop fastfetch miniserve xxd bat wget file 7zip nano nano-syntax"
+pkgs="eza htop fastfetch miniserve xxd bat wget file 7zip nano nano-syntax bash"
 if ! pkg show $pkgs 2>/dev/null >/dev/null; then
     apk add $pkgs --virtual dhbase
 fi
