@@ -1,0 +1,222 @@
+### Common vars
+export PATH="$PATH:$HOME/.local/bin"
+export EDITOR="$(command -v nano)"
+export PAGER=less
+# Disable history
+unset HISTFILE
+export LESSHISTFILE=-
+export PYTHONSTARTUP="$HOME/.config/python/startup.py"
+# Bat settings
+export BAT_STYLE=header,grid \
+       BAT_THEME=ansi
+# Less colors
+export LESS_TERMCAP_md=$'\e[1;34m' \
+       LESS_TERMCAP_me=$'\e[0m' \
+       LESS_TERMCAP_so=$'\e[01;33m' \
+       LESS_TERMCAP_se=$'\e[0m' \
+       LESS_TERMCAP_us=$'\e[1;32m' \
+       LESS_TERMCAP_ue=$'\e[0m'
+### Termux vars
+export DISPLAY=:0
+# Nerd fonts
+export NFONTS="true"
+# Cargo complains about hardlinks
+export CARGO_INCREMENTAL=0
+# Pulseaudio socket does not work when XRD is not set
+export XDG_RUNTIME_DIR="$TMPDIR"
+# Common places
+s=/sdcard/Download
+p=$PREFIX
+g=$PREFIX/glibc
+# Framerate counters for dxvk and opengl
+if [[ -n $GLIBC_PREFIX ]]; then
+    export DXVK_HUD=version,api,devinfo,fps,frametimes,gpuload,memory
+    export GALLIUM_HUD=fps
+fi
+
+### Shell prompt
+if [[ $UID != 0 ]]; then
+    # User
+    PROMPT_COMMAND='echo -en "\e]0;termux - $PWD\a"'
+    PS1="\[\e[30;102m\] \w \[\e[92;49m\]\[\e[0m\] "
+    PS2="\[\e[92m\]+\[\e[0m\] "
+else
+    # Root
+    PROMPT_COMMAND='echo -en "\e]0;su - $PWD\a"'
+    PS1="\[\e[30;101m\] \w \[\e[91;49m\]\[\e[0m\] "
+    PS2="\[\e[91m\]+\[\e[0m\] "
+fi
+
+### Shell options
+# Enable !(something)
+shopt -s extglob
+# Enable **
+shopt -s globstar
+# Correct cd typos
+shopt -s cdspell
+# Verify history commands typed with !
+shopt -s histverify
+
+### Aliases
+# Shorthands
+alias c="clear"
+alias cd..="cd .."
+alias q="exit"
+alias ms="miniserve"
+# Disable wget HSTS file
+# Remove if using busybox wget
+alias wget="wget --hsts-file /dev/null"
+# Only 4 packets
+alias ping="ping -c 4"
+# Human-readable sizes
+alias du="du -sh"
+alias df="df -h"
+# Color for diff & grep
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+# Verbose
+alias cp="cp -v"
+alias mv="mv -v"
+alias mkdir="mkdir -v"
+alias ln="ln -v"
+alias rm="rm -v"
+alias rmdir="rmdir -v"
+# Typos
+alias sl="ls"
+alias s="ls"
+alias ld="ls"
+alias cx="cd"
+alias cta="cat"
+alias nnao="nano"
+# ls -> eza
+if command -v eza >/dev/null; then
+    # When eza is installed:
+    alias ls="eza"
+    alias la="ls -a"
+    alias l="ls -lhgoM"
+    alias ll="l -a"
+else
+    # Otherwise add default `ls` aliases
+    alias la="ls -a"
+    alias ll="ls -alh"
+    alias l="ls -lh"
+fi
+# Polyfills
+command -v which >/dev/null || alias which="type -P"
+command -v rg >/dev/null || alias rg="grep -r"
+alias neofetch="fastfetch"
+#alias vi="nano"
+
+### Termux aliases
+# Shorthands
+alias tp="termux-open"
+alias tcs="termux-clipboard-set"
+alias tms="termux-media-scan"
+alias sd="cd $s"
+alias sd..="cd $s/.."
+alias gr="exec grun --shell"
+# «services» (I start those by opening a new tab)
+alias tx="exec termux-x11"
+alias pa="exec pulseaudio --exit-idle-time=-1"
+alias pax="pulseaudio --exit-idle-time=-1 --load=module-native-protocol-tcp"
+# Overrides
+alias run-as="LD_PRELOAD= $HOME/.local/bin/run-as"
+alias nc="netcat"
+
+### Common functions
+# hexdump to less
+hxl() {
+    xxd -g1 -R always "$@" | less -RF
+}
+# Hex a number
+hex() {
+    if [[ $# = 0 ]]; then
+        echo "Usage: hex <numbers...>"
+        return 1
+    fi
+    printf "0x%X" "$1"
+    shift
+    if [[ $# -gt 0 ]]; then
+        printf " 0x%X" "$@"
+    fi
+    printf "\n"
+}
+# Colorful help
+help() {
+    case $# in
+        0) command help;;
+        1) "$1" --help 2>&1 | bat --language=help --paging=never --style=plain;;
+        *) "$@" 2>&1 | bat --language=help --paging=never --style=plain;;
+    esac
+}
+# Git overrides
+git() {
+    case "$1" in
+    clone|fetch) gix "$@";;
+    # Git diff has scrolling with mouse/touch disabled, so I've piped it into bat
+    diff) command git "$@" | bat --language=diff --style=plain;;
+    log) command git "$@" | bat --language=gitlog --style=plain;;
+    *) command git "$@";;
+    esac
+}
+
+### Termux functions
+# 5-line sudo replacement
+sudo() {
+    if [[ $# = 0 ]]; then
+        echo "Usage: sudo <command>"
+        return 1
+    fi
+    su -i -c "export PATH='$PATH:/debug_ramdisk:/system/bin:/system/xbin';" "export HOME='$HOME/.suroot';" "$@"
+}
+# su override
+su() {
+    if [[ $# = 0 ]]; then
+        sudo login
+    else
+        command su "$@"
+    fi
+}
+# Allows to use some pm commands without root, examples:
+# pm list package
+# pm path com.termux
+pm() {
+    /system/bin/pm "$@" 2>&1 </dev/null | cat
+}
+# Cds to package's directory, useful to extract apks
+pmcd() {
+    local path="$(pm path "$@" | head -n1)"
+    if [[ -z $path ]]; then
+        echo Package not found
+    else
+        path="${path/package:/}"
+        cd "$(dirname "$path")"
+    fi
+}
+# Greps pm package
+pmgrep() {
+    pm list package | sed -n "/$1/{s/package://;p}"
+}
+# grep + cd
+pmgrcd() {
+    pmcd $(pmgrep "$1")
+}
+# Very thin ldd wrapper
+if [[ -z $GLIBC_PREFIX ]]; then
+    ldd() {
+        /system/bin/linker64 --list $(realpath "$@")
+    }
+else
+    # Glibc ldd works fine
+    true
+fi
+# Switch theme
+lightswitch() {
+    case "$(readlink ~/.termux/colors.properties)" in
+        dark*) echo "Light up this night"
+        \ln -sf light.properties ~/.termux/colors.properties;;
+        light*) echo "Embrace the darkness"
+        \ln -sf dark.properties ~/.termux/colors.properties;;
+    esac
+    trs
+}

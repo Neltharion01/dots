@@ -1,0 +1,31 @@
+#!/usr/bin/python3
+import sys;
+from random import randint;
+
+help = """\
+randint - print a random integer
+Usage:
+    randint
+    randint <max>
+    randint <min> <max>\
+"""
+
+def argint(i):
+    try:
+        return int(sys.argv[i]);
+    except ValueError:
+        print(help);
+        sys.exit(1);
+
+arglen = len(sys.argv);
+if arglen == 1:
+    rnd = randint(0, 65536);
+    print(rnd);
+elif arglen == 2:
+    rnd = randint(0, argint(1));
+    print(rnd);
+elif arglen == 3:
+    rnd = randint(argint(1), argint(2));
+    print(rnd);
+if arglen > 3:
+    print(help);

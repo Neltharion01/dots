@@ -1,0 +1,172 @@
+### Common vars
+export PATH="$PATH:$HOME/.local/bin"
+export EDITOR="$(command -v nano)"
+export PAGER=less
+# Disable history
+unset HISTFILE
+export LESSHISTFILE=-
+export PYTHONSTARTUP="/etc/python/startup.py"
+# Bat settings
+export BAT_STYLE=header,grid \
+       BAT_THEME=ansi
+# Less colors
+export LESS_TERMCAP_md=$'\e[1;34m' \
+       LESS_TERMCAP_me=$'\e[0m' \
+       LESS_TERMCAP_so=$'\e[01;33m' \
+       LESS_TERMCAP_se=$'\e[0m' \
+       LESS_TERMCAP_us=$'\e[1;32m' \
+       LESS_TERMCAP_ue=$'\e[0m'
+
+### Shell prompt
+if [[ $NFONTS = true ]]; then
+    if [[ $UID = 0 ]]; then
+        # Root
+        # blue > red > green
+        PS1='\[\e[30;104m\] \h \[\e[94;101m\]\[\e[30m\] \u \[\e[91;102m\]\[\e[30;102m\] \w \[\e[92;49m\]\[\e[0m\] '
+    else
+        # User
+        # blue > yellow > green
+        PS1='\[\e[30;104m\] \h \[\e[94;103m\]\[\e[30m\] \u \[\e[93;102m\]\[\e[30;102m\] \w \[\e[92;49m\]\[\e[0m\] '
+    fi
+else
+    # default prompt from arch linux
+    if [[ $UID = 0 ]]; then
+        # [red cyan]
+        PS1='\[\e[01;31m\][\h\[\e[01;36m\] \W\[\e[01;31m\]]\$\[\e[0m\] '
+    else
+        # [green white]
+        PS1='\[\e[01;32m\][\u@\h\[\e[01;37m\] \W\[\e[01;32m\]]\$\[\e[0m\] '
+    fi
+fi
+# PS2
+if [[ $UID = 0 ]]; then
+    # 91
+    PS2="\[\e[91m\]+\[\e[0m\] "
+else
+    # 92
+    PS2="\[\e[92m\]+\[\e[0m\] "
+fi
+
+PROMPT_COMMAND='echo -ne "\e]0;$USER@$HOSTNAME:${PWD/#$HOME/\~}\a"'
+
+### Shell options
+# Enable !(something)
+shopt -s extglob
+# Enable **
+shopt -s globstar
+# Correct cd typos
+shopt -s cdspell
+# Verify history commands typed with !
+shopt -s histverify
+
+### Aliases
+# Shorthands
+alias c="clear"
+alias cd..="cd .."
+alias q="exit"
+alias ms="miniserve"
+# Disable wget HSTS file
+# Remove if using busybox wget
+alias wget="wget --hsts-file /dev/null"
+# Only 4 packets
+alias ping="ping -c 4"
+# Human-readable sizes
+alias du="du -sh"
+alias df="df -h"
+# Color for diff & grep
+alias grep="grep --color=auto"
+alias diff="diff --color=auto"
+# Verbose
+alias cp="cp -v"
+alias mv="mv -v"
+alias mkdir="mkdir -v"
+alias ln="ln -v"
+alias rm="rm -v"
+alias rmdir="rmdir -v"
+# Typos
+alias sl="ls"
+alias s="ls"
+alias ld="ls"
+alias cx="cd"
+alias cta="cat"
+alias nnao="nano"
+# ls -> eza
+if command -v eza >/dev/null; then
+    # When eza is installed:
+    alias ls="eza"
+    alias la="ls -a"
+    alias l="ls -lhgoM"
+    alias ll="l -a"
+else
+    # Otherwise add default `ls` aliases
+    alias la="ls -a"
+    alias ll="ls -alh"
+    alias l="ls -lh"
+fi
+# Polyfills
+command -v which >/dev/null || alias which="type -P"
+command -v rg >/dev/null || alias rg="grep -r"
+alias neofetch="fastfetch"
+#alias vi="nano"
+
+### Common functions
+# hexdump to less
+hxl() {
+    xxd -g1 -R always "$@" | less -RF
+}
+# Hex a number
+hex() {
+    if [[ $# = 0 ]]; then
+        echo "Usage: hex <numbers...>"
+        return 1
+    fi
+    printf "0x%X" "$1"
+    shift
+    if [[ $# -gt 0 ]]; then
+        printf " 0x%X" "$@"
+    fi
+    printf "\n"
+}
+# Colorful help
+help() {
+    case $# in
+        0) command help;;
+        1) "$1" --help 2>&1 | bat --language=help --paging=never --style=plain;;
+        *) "$@" 2>&1 | bat --language=help --paging=never --style=plain;;
+    esac
+}
+# Git overrides
+git() {
+    case "$1" in
+    # No gitoxide on Alpine
+    #clone|fetch) gix "$@";;
+    # Git diff has scrolling with mouse/touch disabled, so I've piped it into bat
+    diff) command git "$@" | bat --language=diff --style=plain;;
+    log) command git "$@" | bat --language=gitlog --style=plain;;
+    *) command git "$@";;
+    esac
+}
+
+### Server functions
+# Switch user or open screen
+srv() {
+    case $# in
+        0) screen -qxRR "$USER";;
+        1) if [[ $UID != 0 ]]; then
+               echo "Only root may switch users"
+               return 1
+           fi
+           su "$1" -l -c "export NFONTS=$NFONTS; bash -l";;
+        2) echo "Usage: srv [user]" >&2
+           return 1;;
+    esac
+}
+# Attach to lxc
+lattach() {
+    case $# in
+        0) lxc-attach -n "$USER" -- su -l;;
+        1) lxc-attach -n "$1" -- su -l;;
+        2) echo "Usage: lattach [container]";
+           return 1;;
+    esac
+}

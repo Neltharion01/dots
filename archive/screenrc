@@ -1,0 +1,28 @@
+bind ^k
+bind ^\
+escape ^a^a
+
+cd $HOME
+shell -$SHELL
+startup_message off
+defutf8 on
+defscrollback 15000
+deflogin off
+altscreen on
+term screen-256color
+vbell off
+msgwait 3
+
+hardstatus alwayslastline '%{= kG}[ %{G}%H %{g}][%= %{= kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B} %m-%d %{W} %c %{g}]'
+
+#zombie ^[r
+#termcapinfo xterm* ti@:te@
+
+bind c screen 1
+bind ^c screen 1
+bind 0 select 10                                                            
+screen 1
+title $USER
+
+# Darkdustry lives forever, just like Obvilion do
+# And my hope dies at last

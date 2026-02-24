@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+# py - python expression evaluator
+
+import ast;
+import sys;
+import subprocess;
+import signal;
+
+# https://stackoverflow.com/a/76636602
+def exec_with_return(code):
+    a = ast.parse(code);
+    last_expression = None;
+    if a.body:
+        a_last = a.body[-1];
+        if isinstance(a_last, ast.Expr):
+            last_expression = ast.unparse(a.body.pop());
+        elif isinstance(a_last, ast.Assign):
+            last_expression = ast.unparse(a_last.targets[0]);
+        elif isinstance(a_last, (ast.AnnAssign, ast.AugAssign)):
+            last_expression = ast.unparse(a_last.target);
+    exec(ast.unparse(a));
+    if last_expression:
+        return eval(last_expression);
+
+def run(args):
+    # Ignore SIGINT, so it is passed to child process
+    signal.signal(signal.SIGINT, lambda _sig, _stack: None);
+    subprocess.run(args);
+
+args = sys.argv[1:];
+if len(args) == 0:
+    run(["python"]);
+elif args[0].endswith(".py"):
+    run(["python"] + args);
+else:
+    print(exec_with_return(" ".join(args)));
