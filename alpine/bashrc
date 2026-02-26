@@ -105,7 +105,6 @@ else
 fi
 # Polyfills
 command -v which >/dev/null || alias which="type -P"
-command -v rg >/dev/null || alias rg="grep -r"
 alias neofetch="fastfetch"
 #alias vi="nano"
 
@@ -146,6 +145,12 @@ git() {
     *) command git "$@";;
     esac
 }
+
+if ! command -v rg >/dev/null; then
+rg() {
+    grep "$1" -r .
+}
+fi
 
 ### Server functions
 # Switch user or open screen
