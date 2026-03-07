@@ -70,6 +70,7 @@ alias ms="miniserve"
 alias wget="wget --hsts-file /dev/null"
 # Only 4 packets
 alias ping="ping -c 4"
+alias ping6="ping6 -c 4"
 # Human-readable sizes
 alias du="du -sh"
 alias df="df -h"
