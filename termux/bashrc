@@ -122,7 +122,8 @@ alias pa="exec pulseaudio --exit-idle-time=-1"
 alias pax="pulseaudio --exit-idle-time=-1 --load=module-native-protocol-tcp"
 # Overrides
 alias run-as="LD_PRELOAD= $HOME/.local/bin/run-as"
-alias nc="netcat"
+alias nc="netcat-openbsd"
+alias netcat="netcat-openbsd"
 
 ### Common functions
 # hexdump to less
