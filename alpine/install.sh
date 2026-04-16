@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 . /etc/os-release
-if [[ $ID != alpine ]]; then
+if [ "$ID" != alpine ]; then
     echo "Only for Alpine"
     exit 1
 fi
@@ -25,5 +25,8 @@ pkgs="eza htop fastfetch miniserve xxd bat wget file 7zip nano nano-syntax bash 
 if ! pkg show $pkgs 2>/dev/null >/dev/null; then
     apk add $pkgs --virtual dhbase
 fi
+
+# No chsh on Alpine
+sed 's|root:x:0:0:root:/root:/bin/sh|root:x:0:0:root:/root:/bin/bash|' -i /etc/passwd
 
 rc-service sshd restart
