@@ -9,7 +9,7 @@ fi
 cd "$(dirname "$0")"
 
 ### Installation
-install() { install -m644 "$@"; }
+install() { command install -m644 "$@"; }
 install bashrc /etc/bash/drakohost.sh
 install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
 
