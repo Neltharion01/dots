@@ -68,7 +68,8 @@ alias du="du -sh"
 alias df="df -h"
 # Color for diff & grep
 alias grep="grep --color=auto"
-alias diff="diff --color=auto"
+# Busybox diff does not have colors
+#alias diff="diff --color=auto"
 # Verbose
 alias cp="cp -v"
 alias mv="mv -v"
