@@ -9,6 +9,7 @@ fi
 cd "$(dirname "$0")"
 
 ### Installation
+install() { install -m644 "$@"; }
 install bashrc /etc/bash/drakohost.sh
 install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
 
@@ -18,8 +19,8 @@ install nanorc /etc/nanorc
 
 install -D ../common/fastfetch.jsonc /etc/fastfetch/config.jsonc
 install -D ../common/startup.py /etc/python/startup.py
-install ../common/py /usr/local/bin/py
-install ../common/randint /usr/local/bin/randint
+install -m755 ../common/py /usr/local/bin/py
+install -m755 ../common/randint /usr/local/bin/randint
 
 pkgs="eza htop fastfetch miniserve xxd bat wget file 7zip nano nano-syntax bash tmux"
 if ! pkg show $pkgs 2>/dev/null >/dev/null; then

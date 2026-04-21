@@ -14,10 +14,11 @@ if su --help | grep -- -i >/dev/null; then
     sed -i 's/su -c/su -i -c/' ~/.bashrc
 fi
 
+install() { command install -m600 "$@"; }
 install -D ../common/fastfetch.jsonc ~/.config/fastfetch/config.jsonc
 install -D ../common/startup.py ~/.config/python/startup.py
-install -D ../common/py ~/.local/bin/py
-install -D ../common/randint ~/.local/bin/randint
+install -m700 -D ../common/py ~/.local/bin/py
+install -m700 -D ../common/randint ~/.local/bin/randint
 
 install -D htoprc ~/.config/htop/htoprc
 install -D nanorc ~/.config/nano/nanorc
