@@ -158,7 +158,7 @@ fi
 # Switch user or open screen
 srv() {
     case $# in
-        0) tmux new -A -s "$USER";;
+        0) tmux new -A;;
         1) if [[ $UID != 0 ]]; then
                echo "Only root may switch users"
                return 1
