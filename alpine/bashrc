@@ -1,6 +1,7 @@
 ### Common vars
 export PATH="$PATH:$HOME/.local/bin"
 export EDITOR="$(command -v nano)"
+export PAGER="less"
 # Disable history
 unset HISTFILE
 export LESSHISTFILE=-
