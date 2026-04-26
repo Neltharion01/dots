@@ -104,10 +104,6 @@ alias neofetch="fastfetch"
 #alias vi="nano"
 alias sudo="doas"
 
-### Hardening
-# Set a better umask that disallows [o]thers access
-umask 0027
-
 ### Common functions
 # hexdump to less
 hxl() {
