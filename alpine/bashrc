@@ -102,6 +102,7 @@ fi
 command -v which >/dev/null || alias which="type -P"
 alias neofetch="fastfetch"
 #alias vi="nano"
+alias sudo="doas"
 
 ### Hardening
 # Set a better umask that disallows [o]thers access
