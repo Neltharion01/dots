@@ -3,8 +3,7 @@
 
 import ast;
 import sys;
-import subprocess;
-import signal;
+import os;
 
 # https://stackoverflow.com/a/76636602
 def exec_with_return(code):
@@ -22,15 +21,10 @@ def exec_with_return(code):
     if last_expression:
         return eval(last_expression);
 
-def run(args):
-    # Ignore SIGINT, so it is passed to child process
-    signal.signal(signal.SIGINT, lambda _sig, _stack: None);
-    subprocess.run(args);
-
 args = sys.argv[1:];
 if len(args) == 0:
-    run(["python"]);
+    os.execvp("python", ["python"]);
 elif args[0].endswith(".py"):
-    run(["python"] + args);
+    os.execvp("python", ["python"] + args);
 else:
     print(exec_with_return(" ".join(args)));
