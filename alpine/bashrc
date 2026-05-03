@@ -166,12 +166,3 @@ srv() {
            return 1;;
     esac
 }
-# Attach to lxc
-lattach() {
-    case $# in
-        0) lxc-attach -n "$USER" -- su -l;;
-        1) lxc-attach -n "$1" -- su -l;;
-        2) echo "Usage: lattach [container]";
-           return 1;;
-    esac
-}
