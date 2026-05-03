@@ -22,7 +22,7 @@ install -m700 -D ../common/randint ~/.local/bin/randint
 
 install -D htoprc ~/.config/htop/htoprc
 install -D nanorc ~/.config/nano/nanorc
-install -D trs ~/.local/bin/trs
+install -m700 -D trs ~/.local/bin/trs
 
 install -D light.properties ~/.termux/light.properties
 install -D dark.properties ~/.termux/dark.properties
