@@ -9,10 +9,10 @@ set selectedcolor black,lightcyan
 set spotlightcolor black,lightyellow
 set statuscolor black,lightcyan
 set numbercolor cyan
-set stripecolor ,#444
-set scrollercolor cyan
-set keycolor cyan
-set functioncolor cyan
+set stripecolor black,lightcyan
+set scrollercolor lightcyan
+set keycolor lightcyan
+set functioncolor lightcyan
 
 include "/data/data/com.termux/files/usr/share/nano/*.nanorc"
 
