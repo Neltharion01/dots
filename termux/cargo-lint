@@ -1,0 +1,16 @@
+#!/bin/sh
+exec cargo clippy -- \
+    -W clippy::implicit_clone \
+    -W clippy::elidable_lifetime_names \
+    -W clippy::bool_to_int_with_if \
+    -W clippy::redundant_clone \
+    -W clippy::renamed_function_params \
+    -W clippy::unnecessary_semicolon \
+    -W clippy::single_char_pattern \
+    -W clippy::semicolon_if_nothing_returned \
+    -W clippy::new_without_default \
+    -W clippy::semicolon_inside_block \
+    -W clippy::cargo \
+    -W clippy::explicit_iter_loop \
+    -W clippy::derive_partial_eq_without_eq \
+    -A clippy::cargo_common_metadata

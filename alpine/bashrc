@@ -6,6 +6,7 @@ export PAGER="less"
 unset HISTFILE
 export LESSHISTFILE=-
 export PYTHONSTARTUP="/etc/python/startup.py"
+export PYTHON_HISTORY="/dev/null"
 # Bat settings
 export BAT_STYLE=header,grid \
        BAT_THEME=ansi
@@ -31,14 +32,7 @@ else
         PS1='\[\e[01;32m\][\u@\h\[\e[01;37m\] \W\[\e[01;32m\]]\$\[\e[0m\] '
     fi
 fi
-# PS2
-if [[ $UID = 0 ]]; then
-    # 91
-    PS2="\[\e[91m\]+\[\e[0m\] "
-else
-    # 92
-    PS2="\[\e[92m\]+\[\e[0m\] "
-fi
+PS2="\[\e[92m\]+\[\e[0m\] "
 
 PROMPT_COMMAND='echo -ne "\e]0;$USER@$HOSTNAME:${PWD/#$HOME/\~}\a"'
 
@@ -85,6 +79,8 @@ alias ld="ls"
 alias cx="cd"
 alias cta="cat"
 alias nnao="nano"
+alias nani="nano"
+alias nsno="nano"
 # ls -> eza
 if command -v eza >/dev/null; then
     # When eza is installed:
@@ -100,6 +96,7 @@ else
 fi
 # Polyfills
 command -v which >/dev/null || alias which="type -P"
+command -v gix >/dev/null || alias gix="git"
 alias neofetch="fastfetch"
 #alias vi="nano"
 alias sudo="doas"
@@ -133,17 +130,23 @@ help() {
 # Git overrides
 git() {
     case "$1" in
-    # No gitoxide on Alpine
-    #clone|fetch) gix "$@";;
+    clone|fetch) gix "$@";;
     # Git diff has scrolling with mouse/touch disabled, so I've piped it into bat
     diff) command git "$@" | bat --language=diff --style=plain;;
     log) command git "$@" | bat --language=gitlog --style=plain;;
+    blame) command git "$@" | less;;
     *) command git "$@";;
     esac
 }
 # Colorful man
 man() {
-    LESS_TERMCAP_md=$'\e[1;34m' LESS_TERMCAP_me=$'\e[0m' LESS_TERMCAP_so=$'\e[01;33m' LESS_TERMCAP_se=$'\e[0m' LESS_TERMCAP_us=$'\e[1;32m' LESS_TERMCAP_ue=$'\e[0m' command man "$@"
+    LESS_TERMCAP_md=$'\e[1;34m' \
+    LESS_TERMCAP_me=$'\e[0m' \
+    LESS_TERMCAP_so=$'\e[01;33m' \
+    LESS_TERMCAP_se=$'\e[0m' \
+    LESS_TERMCAP_us=$'\e[1;32m' \
+    LESS_TERMCAP_ue=$'\e[0m' \
+    command man "$@"
 }
 
 if ! command -v rg >/dev/null; then
@@ -161,7 +164,7 @@ srv() {
                echo "Only root may switch users"
                return 1
            fi
-           su "$1" -l -c "export NFONTS=$NFONTS; bash -l";;
+           su "$1" -l -c "NFONTS=$NFONTS bash -l";;
         2) echo "Usage: srv [user]" >&2
            return 1;;
     esac

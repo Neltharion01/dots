@@ -6,6 +6,7 @@ export PAGER=less
 unset HISTFILE
 export LESSHISTFILE=-
 export PYTHONSTARTUP="$HOME/.config/python/startup.py"
+export PYTHON_HISTORY="/dev/null"
 # Bat settings
 export BAT_STYLE=header,grid \
        BAT_THEME=ansi
@@ -15,6 +16,10 @@ export DISPLAY=:0
 export NFONTS="true"
 # Cargo complains about hardlinks
 export CARGO_INCREMENTAL=0
+# And uv too...
+export UV_LINK_MODE=copy
+# Glibc cargo can't use tls
+export SSL_CERT_FILE=/data/data/com.termux/files/usr/etc/tls/cert.pem
 # Pulseaudio socket does not work when XRD is not set
 export XDG_RUNTIME_DIR="$TMPDIR"
 # Common places
@@ -82,6 +87,8 @@ alias ld="ls"
 alias cx="cd"
 alias cta="cat"
 alias nnao="nano"
+alias nani="nano"
+alias nsno="nano"
 # ls -> eza
 if command -v eza >/dev/null; then
     # When eza is installed:
@@ -97,6 +104,7 @@ else
 fi
 # Polyfills
 command -v which >/dev/null || alias which="type -P"
+command -v gix >/dev/null || alias gix="git"
 command -v rg >/dev/null || alias rg="grep -r"
 alias neofetch="fastfetch"
 #alias vi="nano"
@@ -151,6 +159,7 @@ git() {
     # Git diff has scrolling with mouse/touch disabled, so I've piped it into bat
     diff) command git "$@" | bat --language=diff --style=plain;;
     log) command git "$@" | bat --language=gitlog --style=plain;;
+    blame) command git "$@" | less;;
     *) command git "$@";;
     esac
 }
@@ -166,7 +175,7 @@ sudo() {
         echo "Usage: sudo <command>"
         return 1
     fi
-    su -c "export PATH='$PATH:/debug_ramdisk:/system/bin:/system/xbin';" "export HOME='$HOME/.suroot';" "$@"
+    su -c "export PATH='$PATH:/debug_ramdisk:/system/bin:/system/xbin' HOME='$HOME/.suroot'; $@"
 }
 # su override
 su() {

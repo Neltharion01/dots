@@ -15,10 +15,11 @@ if su --help | grep -- -i >/dev/null; then
 fi
 
 install() { command install -m600 "$@"; }
-install -D ../common/fastfetch.jsonc ~/.config/fastfetch/config.jsonc
+install -D fastfetch.jsonc ~/.config/fastfetch/config.jsonc
 install -D ../common/startup.py ~/.config/python/startup.py
 install -m700 -D ../common/py ~/.local/bin/py
 install -m700 -D ../common/randint ~/.local/bin/randint
+install -m700 -D cargo-lint ~/.local/bin/cargo-lint
 
 install -D htoprc ~/.config/htop/htoprc
 install -D nanorc ~/.config/nano/nanorc
@@ -33,7 +34,7 @@ ln -sf $PREFIX/etc/motd.sh ~/.termux/motd.sh
 
 termux-reload-settings &
 
-pkgs="eza htop fastfetch miniserve xxd bat gitoxide wget file p7zip 7zip netcat-openbsd"
+pkgs="eza htop fastfetch miniserve xxd bat gitoxide wget file 7zip netcat-openbsd"
 if ! pkg show $pkgs 2>/dev/null >/dev/null; then
     yes '
 ' | pkg in $pkgs

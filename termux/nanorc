@@ -18,6 +18,7 @@ include "/data/data/com.termux/files/usr/share/nano/*.nanorc"
 
 bind ^Z suspend main
 
+unbind ^J main
 unbind M-J main
 unbind M-T main
 
