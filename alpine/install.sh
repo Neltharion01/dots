@@ -14,10 +14,13 @@ install ../common/bashrc /etc/bash/drakohost.sh
 echo >> /etc/bash/drakohost.sh
 cat bashrc >> /etc/bash/drakohost.sh
 
+install ../common/nanorc /etc/nanorc
+echo >> /etc/nanorc
+cat nanorc >> /etc/nanorc
+
 # /etc
 install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
 install htoprc /etc/htoprc
-install nanorc /etc/nanorc
 install tmux.conf /etc/tmux.conf
 install ../common/fastfetch.jsonc /etc/fastfetch/config.jsonc
 install ../common/startup.py /etc/python/startup.py

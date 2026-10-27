@@ -1,0 +1,27 @@
+###################
+## DrakoHost nanorc
+## https://github.com/Neltharion01/dots
+###################
+
+set autoindent
+set indicator
+set smarthome
+set softwrap
+set zap
+
+set titlecolor black,lightcyan
+set selectedcolor black,lightcyan
+set spotlightcolor black,lightyellow
+set statuscolor black,lightcyan
+set numbercolor cyan
+set stripecolor black,lightcyan
+set scrollercolor lightcyan
+set keycolor lightcyan
+set functioncolor lightcyan
+
+unbind ^J main
+unbind M-J main
+unbind M-T main
+
+bind Sh-M-X "{execute}|| printf "\033]52;c;%s\007" "$(base64 | tr -d '\n')" {enter}" main
+bind Sh-M-C "{execute}|| printf "\033]52;c;%s\007" "$(base64 | tr -d '\n')" {enter}{undo}" main

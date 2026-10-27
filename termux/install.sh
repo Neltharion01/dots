@@ -12,6 +12,10 @@ install ../common/bashrc ~/.bashrc
 echo >> ~/.bashrc
 cat bashrc >> ~/.bashrc
 
+install -D ../common/nanorc ~/.config/nano/nanorc
+echo >> ~/.config/nano/nanorc
+cat nanorc >> ~/.config/nano/nanorc
+
 if su --help | grep -- -i >/dev/null; then
     # Fix for magisk >29 versions
     sed -i 's/su -c/su -i -c/' ~/.bashrc
@@ -26,7 +30,6 @@ install ../common/wgetrc $PREFIX/etc/wgetrc
 install -D fastfetch.jsonc ~/.config/fastfetch/config.jsonc
 install -D ../common/startup.py ~/.config/python/startup.py
 install -D htoprc ~/.config/htop/htoprc
-install -D nanorc ~/.config/nano/nanorc
 
 # .local/bin
 install -m700 -D ../common/py ~/.local/bin/py
