@@ -22,7 +22,7 @@ cat nanorc >> /etc/nanorc
 install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
 install htoprc /etc/htoprc
 install tmux.conf /etc/tmux.conf
-install ../common/fastfetch.jsonc /etc/fastfetch/config.jsonc
+install fastfetch.jsonc /etc/fastfetch/config.jsonc
 install ../common/startup.py /etc/python/startup.py
 install ../common/wgetrc /etc/wgetrc
 
