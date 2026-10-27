@@ -19,17 +19,14 @@ if su --help | grep -- -i >/dev/null; then
     sed -i 's/su -c/su -i -c/' ~/.bashrc
 fi
 
-install -D ../common/nanorc ~/.config/nano/nanorc
-echo >> ~/.config/nano/nanorc
-cat nanorc >> ~/.config/nano/nanorc
-
 # $PREFIX/etc
 install ../common/wgetrc $PREFIX/etc/wgetrc
 
 # .config
-install -D fastfetch.jsonc ~/.config/fastfetch/config.jsonc
-install -D ../common/startup.py ~/.config/python/startup.py
 install -D htoprc ~/.config/htop/htoprc
+install -D fastfetch.jsonc ~/.config/fastfetch/config.jsonc
+install -D ../common/nanorc ~/.config/nano/nanorc
+install -D ../common/startup.py ~/.config/python/startup.py
 
 # .local/bin
 install -m700 -D ../common/py ~/.local/bin/py
