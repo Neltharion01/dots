@@ -8,20 +8,20 @@ fi
 cd "$(dirname "$0")"
 
 ### Installation
+alias install="install -m600"
+
 install ../common/bashrc ~/.bashrc
 echo >> ~/.bashrc
 cat bashrc >> ~/.bashrc
-
-install -D ../common/nanorc ~/.config/nano/nanorc
-echo >> ~/.config/nano/nanorc
-cat nanorc >> ~/.config/nano/nanorc
 
 if su --help | grep -- -i >/dev/null; then
     # Fix for magisk >29 versions
     sed -i 's/su -c/su -i -c/' ~/.bashrc
 fi
 
-alias install="install -m600"
+install -D ../common/nanorc ~/.config/nano/nanorc
+echo >> ~/.config/nano/nanorc
+cat nanorc >> ~/.config/nano/nanorc
 
 # $PREFIX/etc
 install ../common/wgetrc $PREFIX/etc/wgetrc
