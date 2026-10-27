@@ -8,20 +8,27 @@ if [ "$ID" != alpine ]; then
 fi
 cd "$(dirname "$0")"
 
-### Installation
-install() { command install -m644 "$@"; }
-install bashrc /etc/bash/drakohost.sh
-install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
+alias install="install -m644"
 
+install ../common/bashrc /etc/bash/drakohost.sh
+echo >> /etc/bash/drakohost.sh
+cat bashrc >> /etc/bash/drakohost.sh
+
+# /etc
+install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
 install htoprc /etc/htoprc
-install -D htoprc-root ~/.config/htop/htoprc
 install nanorc /etc/nanorc
 install tmux.conf /etc/tmux.conf
+install ../common/fastfetch.jsonc /etc/fastfetch/config.jsonc
+install ../common/startup.py /etc/python/startup.py
+install ../common/wgetrc /etc/wgetrc
 
-install -D ../common/fastfetch.jsonc /etc/fastfetch/config.jsonc
-install -D ../common/startup.py /etc/python/startup.py
+# /usr/local/bin
 install -m755 ../common/py /usr/local/bin/py
 install -m755 ../common/randint /usr/local/bin/randint
+
+# ~/.config
+install -D htoprc-root ~/.config/htop/htoprc
 
 pkgs="eza htop fastfetch miniserve xxd bat wget file 7zip nano nano-syntax bash tmux"
 if ! pkg show $pkgs 2>/dev/null >/dev/null; then

@@ -1,5 +1,9 @@
 #!/usr/bin/python3
+# ==========
 # py - python expression evaluator
+# ==========
+# Copyright 2026 Neltharion01
+# SPDX-License-Identifier: 0BSD
 
 import ast;
 import sys;

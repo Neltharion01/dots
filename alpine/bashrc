@@ -1,15 +1,5 @@
-### Common vars
-export PATH="$PATH:$HOME/.local/bin"
-export EDITOR="$(command -v nano)"
-export PAGER="less"
-# Disable history
-unset HISTFILE
-export LESSHISTFILE=-
+# Python startup
 export PYTHONSTARTUP="/etc/python/startup.py"
-export PYTHON_HISTORY="/dev/null"
-# Bat settings
-export BAT_STYLE=header,grid \
-       BAT_THEME=ansi
 
 ### Shell prompt
 if [[ $NFONTS = true ]]; then
@@ -36,124 +26,8 @@ PS2="\[\e[92m\]+\[\e[0m\] "
 
 PROMPT_COMMAND='echo -ne "\e]0;$USER@$HOSTNAME:${PWD/#$HOME/\~}\a"'
 
-### Shell options
-# Enable !(something)
-shopt -s extglob
-# Enable **
-shopt -s globstar
-# Correct cd typos
-shopt -s cdspell
-# Verify history commands typed with !
-shopt -s histverify
-
-### Aliases
-# Shorthands
-alias c="clear"
-alias cd..="cd .."
-alias q="exit"
-alias ms="miniserve"
-# Disable wget HSTS file
-# Remove if using busybox wget
-alias wget="wget --hsts-file /dev/null"
-# Only 4 packets
-alias ping="ping -c 4"
-alias ping6="ping6 -c 4"
-# Human-readable sizes
-alias du="du -sh"
-alias df="df -h"
-# Color for diff & grep
-alias grep="grep --color=auto"
-# Busybox diff does not have colors
-#alias diff="diff --color=auto"
-# Verbose
-alias cp="cp -v"
-alias mv="mv -v"
-alias mkdir="mkdir -v"
-alias ln="ln -v"
-alias rm="rm -v"
-alias rmdir="rmdir -v"
-# Typos
-alias sl="ls"
-alias s="ls"
-alias ld="ls"
-alias cx="cd"
-alias cta="cat"
-alias nnao="nano"
-alias nani="nano"
-alias nsno="nano"
-# ls -> eza
-if command -v eza >/dev/null; then
-    # When eza is installed:
-    alias ls="eza"
-    alias la="ls -a"
-    alias l="ls -lhgoM"
-    alias ll="l -a"
-else
-    # Otherwise add default `ls` aliases
-    alias la="ls -a"
-    alias ll="ls -alh"
-    alias l="ls -lh"
-fi
-# Polyfills
-command -v which >/dev/null || alias which="type -P"
-command -v gix >/dev/null || alias gix="git"
-alias neofetch="fastfetch"
-#alias vi="nano"
+### Alpine aliases
 alias sudo="doas"
-
-### Common functions
-# hexdump to less
-hxl() {
-    xxd -g1 -R always "$@" | less -RF
-}
-# Hex a number
-hex() {
-    if [[ $# = 0 ]]; then
-        echo "Usage: hex <numbers...>"
-        return 1
-    fi
-    printf "0x%X" "$1"
-    shift
-    if [[ $# -gt 0 ]]; then
-        printf " 0x%X" "$@"
-    fi
-    printf "\n"
-}
-# Colorful help
-help() {
-    case $# in
-        0) command help;;
-        1) "$1" --help 2>&1 | bat --language=help --paging=never --style=plain;;
-        *) "$@" 2>&1 | bat --language=help --paging=never --style=plain;;
-    esac
-}
-# Git overrides
-git() {
-    case "$1" in
-    clone|fetch) gix "$@";;
-    # Git diff has scrolling with mouse/touch disabled, so I've piped it into bat
-    diff) command git "$@" | bat --language=diff --style=plain;;
-    log) command git "$@" | bat --language=gitlog --style=plain;;
-    blame) command git "$@" | less;;
-    *) command git "$@";;
-    esac
-}
-# Colorful man
-man() {
-    LESS_TERMCAP_md=$'\e[1;34m' \
-    LESS_TERMCAP_me=$'\e[0m' \
-    LESS_TERMCAP_so=$'\e[01;33m' \
-    LESS_TERMCAP_se=$'\e[0m' \
-    LESS_TERMCAP_us=$'\e[1;32m' \
-    LESS_TERMCAP_ue=$'\e[0m' \
-    command man "$@"
-}
-
-if ! command -v rg >/dev/null; then
-rg() {
-    grep "$1" -r .
-}
-fi
 
 ### Server functions
 # Switch user or open screen
