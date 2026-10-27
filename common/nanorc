@@ -3,12 +3,32 @@
 ## https://github.com/Neltharion01/dots
 ###################
 
+## When soft line wrapping is enabled, make it wrap lines at blanks
+## (tabs and spaces) instead of always at the edge of the screen.
+set atblanks
+## Automatically indent a newly created line to the same number of
+## tabs and/or spaces as the preceding line -- or as the next line
+## if the preceding line is the beginning of a paragraph.
 set autoindent
+## Display a "scrollbar" on the righthand side of the edit window.
 set indicator
+## Let other users (of nano or vim) know that you are editing the file
+set locking
+## With ^R, insert a file into a separate buffer by default.
+set newbuffer
+## Make the Home key smarter: when Home is pressed anywhere but at the
+## very beginning of non-whitespace characters on a line, the cursor
+## will jump to that beginning (either forwards or backwards).  If the
+## cursor is already at that position, it will jump to the true start
+## of the line (the left edge).
 set smarthome
+## Spread overlong lines over multiple screen lines.
 set softwrap
+## Let an unmodified Backspace or Delete erase the marked region (instead
+## of a single character, and without affecting the cutbuffer).
 set zap
 
+# Make ui slightly more colorful
 set titlecolor black,lightcyan
 set selectedcolor black,lightcyan
 set spotlightcolor black,lightyellow
@@ -19,9 +39,13 @@ set scrollercolor lightcyan
 set keycolor lightcyan
 set functioncolor lightcyan
 
+# Justify paragraph
 unbind ^J main
+# Justify file
 unbind M-J main
+# Cut to the end of file
 unbind M-T main
 
+# OSC 52 cut/copy
 bind Sh-M-X "{execute}|| printf "\033]52;c;%s\007" "$(base64 | tr -d '\n')" {enter}" main
 bind Sh-M-C "{execute}|| printf "\033]52;c;%s\007" "$(base64 | tr -d '\n')" {enter}{undo}" main
