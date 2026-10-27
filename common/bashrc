@@ -86,7 +86,7 @@ fi
 
 # Polyfills
 command -v which >/dev/null || alias which="type -P"
-command -v gix >/dev/null || alias gix="git"
+command -v gix >/dev/null || alias gix="command git"
 alias neofetch="fastfetch"
 #alias vi="nano"
 
