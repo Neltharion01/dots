@@ -28,7 +28,7 @@ set softwrap
 ## of a single character, and without affecting the cutbuffer).
 set zap
 
-# Make ui slightly more colorful
+## Make ui slightly more colorful
 set titlecolor black,lightcyan
 set selectedcolor black,lightcyan
 set spotlightcolor black,lightyellow
@@ -39,13 +39,22 @@ set scrollercolor lightcyan
 set keycolor lightcyan
 set functioncolor lightcyan
 
-# Justify paragraph
+## Unbinds
+## Justify paragraph
 unbind ^J main
-# Justify file
+## Justify file
 unbind M-J main
-# Cut to the end of file
+## Cut to the end of file
 unbind M-T main
 
-# OSC 52 cut/copy
+## OSC 52 cut/copy
 bind Sh-M-X "{execute}|| printf "\033]52;c;%s\007" "$(base64 | tr -d '\n')" {enter}" main
 bind Sh-M-C "{execute}|| printf "\033]52;c;%s\007" "$(base64 | tr -d '\n')" {enter}{undo}" main
+
+## Enable tabs to spaces
+set tabstospaces
+set tabsize 4
+
+## Enable tab to spaces only in rust and python files
+# extendsyntax python tabgives "    "
+# extendsyntax rust tabgives "    "
