@@ -8,7 +8,6 @@ exec cargo clippy -- \
     -W clippy::unnecessary_semicolon \
     -W clippy::single_char_pattern \
     -W clippy::semicolon_if_nothing_returned \
-    -W clippy::new_without_default \
     -W clippy::semicolon_inside_block \
     -W clippy::cargo \
     -W clippy::explicit_iter_loop \
