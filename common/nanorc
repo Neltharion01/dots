@@ -14,8 +14,6 @@ set autoindent
 set indicator
 ## Let other users (of nano or vim) know that you are editing the file
 set locking
-## With ^R, insert a file into a separate buffer by default.
-set newbuffer
 ## Make the Home key smarter: when Home is pressed anywhere but at the
 ## very beginning of non-whitespace characters on a line, the cursor
 ## will jump to that beginning (either forwards or backwards).  If the
