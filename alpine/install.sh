@@ -10,20 +10,22 @@ cd "$(dirname "$0")"
 
 alias install="install -m644"
 
-install ../common/bashrc /etc/bash/drakohost.sh
+# bashrc
+install -D ../common/bashrc /etc/bash/drakohost.sh
 echo >> /etc/bash/drakohost.sh
 cat bashrc >> /etc/bash/drakohost.sh
 
+# nanorc
 install ../common/nanorc /etc/nanorc
 echo >> /etc/nanorc
 cat nanorc >> /etc/nanorc
 
 # /etc
-install sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
+install -D sshd.conf /etc/ssh/sshd_config.d/drakohost.conf
 install htoprc /etc/htoprc
 install tmux.conf /etc/tmux.conf
-install fastfetch.jsonc /etc/fastfetch/config.jsonc
-install ../common/startup.py /etc/python/startup.py
+install -D fastfetch.jsonc /etc/fastfetch/config.jsonc
+install -D ../common/startup.py /etc/python/startup.py
 install ../common/wgetrc /etc/wgetrc
 
 # /usr/local/bin
